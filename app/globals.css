@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@layer clerk, components, utilities;
+
+@theme {
+  /* TradeVault - Dark Trading Theme */
+  --color-primary: #10b981;
+  --color-primary-foreground: #022c22;
+  --color-ring: #10b981;
+  --color-success: #10b981;
+  --color-profit: #10b981;
+  --color-buy: #10b981;
+  --color-warning: #f59e0b;
+  --color-destructive: #ef4444;
+  --color-loss: #ef4444;
+  --color-sell: #ef4444;
+  --radius: 0.5rem;
+
+  /* Dark theme (default) */
+  --color-background: #09090b;
+  --color-foreground: #fafafa;
+  --color-card: #111113;
+  --color-card-foreground: #fafafa;
+  --color-popover: #111113;
+  --color-popover-foreground: #fafafa;
+  --color-muted: #18181b;
+  --color-muted-foreground: #a1a1aa;
+  --color-accent: #1a1a1e;
+  --color-accent-foreground: #fafafa;
+  --color-border: #232328;
+  --color-input: #232328;
+  --color-destructive-foreground: #fafafa;
+  
+  /* Terminal colors */
+  --color-terminal-bg: #0a0a0a;
+  --color-terminal-text: #00ff00;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  
+  /* Profit/Loss colors */
+  .profit {
+    @apply text-profit;
+  }
+  
+  .loss {
+    @apply text-loss;
+  }
+}
