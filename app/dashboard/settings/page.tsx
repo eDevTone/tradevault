@@ -1,8 +1,12 @@
 import { Settings, Key, Bell, Shield, Database } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Button } from '@/shared/ui/button'
+import { isBinanceConfigured, isTestnetMode } from '@/lib/env'
 
 export default function SettingsPage() {
+  const binanceConfigured = isBinanceConfigured()
+  const testnetMode = isTestnetMode()
+
   return (
     <div className="space-y-6">
       <div>
@@ -29,41 +33,57 @@ export default function SettingsPage() {
                 </p>
               </div>
             </div>
-            <Button size="sm">Add Exchange</Button>
+            {!binanceConfigured && (
+              <Button size="sm">Configure API</Button>
+            )}
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {/* Binance */}
-            <div className="flex items-center justify-between rounded-lg border border-border/40 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-warning/10 font-bold text-warning">
-                  B
+          {binanceConfigured ? (
+            <div className="space-y-3">
+              {/* Binance */}
+              <div className="flex items-center justify-between rounded-lg border border-border/40 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-warning/10 font-bold text-warning">
+                    B
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Binance</p>
+                    <p className="text-xs text-muted-foreground">
+                      {testnetMode ? 'Testnet' : 'Mainnet'} • Connected
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-foreground">Binance</p>
-                  <p className="text-xs text-muted-foreground">Testnet • Connected</p>
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-profit animate-pulse" />
+                  <span className="text-xs text-profit font-medium">Active</span>
+                  <Button variant="outline" size="sm" className="ml-4">
+                    Configure
+                  </Button>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-profit animate-pulse" />
-                <span className="text-xs text-profit font-medium">Active</span>
-                <Button variant="outline" size="sm" className="ml-4">
-                  Configure
-                </Button>
               </div>
             </div>
-
-            {/* Empty state */}
+          ) : (
             <div className="text-center py-8 rounded-lg border border-dashed border-border/40">
-              <p className="text-sm text-muted-foreground">
-                No additional exchanges connected
+              <p className="text-sm text-foreground font-medium mb-2">
+                No exchange connected
               </p>
-              <Button variant="ghost" size="sm" className="mt-2">
-                + Add Another Exchange
-              </Button>
+              <p className="text-xs text-muted-foreground mb-4">
+                Configure your Binance API keys to start trading
+              </p>
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">
+                  📖 Read the setup guide: <code className="text-primary">docs/BINANCE_SETUP.md</code>
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  🔑 Get testnet keys: <a href="https://testnet.binance.vision" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">testnet.binance.vision</a>
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  ⚙️ Configure: <code className="text-primary">.env.local</code>
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
 
@@ -97,9 +117,16 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between py-3">
             <div>
               <p className="text-sm font-medium text-foreground">API Permissions</p>
-              <p className="text-xs text-muted-foreground mt-1">Spot trading only (withdrawals disabled)</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {binanceConfigured 
+                  ? 'Spot trading only (withdrawals disabled)'
+                  : 'Not configured'
+                }
+              </p>
             </div>
-            <span className="text-xs text-profit">Secure</span>
+            {binanceConfigured && (
+              <span className="text-xs text-profit">Secure</span>
+            )}
           </div>
         </CardContent>
       </Card>
